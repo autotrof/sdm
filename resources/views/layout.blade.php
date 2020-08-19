@@ -24,6 +24,9 @@
   <link rel="stylesheet" href="{{url('')}}/dist/css/adminlte.min.css">
   <!-- overlayScrollbars -->
   <link rel="stylesheet" href="{{url('')}}/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  {{-- DATATABLE --}}
+  <link rel="stylesheet" href="{{url('')}}/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="{{url('')}}/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <!-- Daterange picker -->
   <link rel="stylesheet" href="{{url('')}}/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
@@ -109,7 +112,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{url('')}}/struktur_organisasi" class="nav-link <?=$PARENTTAG=='struktur_organisasi'?'active':''?>">
+            <a href="{{url('')}}/struktur_organisasi" class="nav-link <?=$PARENTTAG=='organisasi'?'active':''?>">
               <i class="nav-icon fas fa-chevron-right"></i>
               <p>
                 Struktur Organisasi
@@ -117,7 +120,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{url('')}}/user" class="nav-link <?=$PARENTTAG=='karyawan'?'user':''?>">
+            <a href="{{url('')}}/user" class="nav-link <?=$PARENTTAG=='user'?'active':''?>">
               <i class="nav-icon fas fa-chevron-right"></i>
               <p>
                 User
@@ -129,6 +132,14 @@
               <i class="nav-icon fas fa-chevron-right"></i>
               <p>
                 Pengaturan
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{url('')}}/logout" class="nav-link">
+              <i class="nav-icon fas fa-chevron-right"></i>
+              <p>
+                Keluar
               </p>
             </a>
           </li>
@@ -176,9 +187,6 @@
 <script src="{{url('')}}/plugins/chart.js/Chart.min.js"></script>
 <!-- Sparkline -->
 <script src="{{url('')}}/plugins/sparklines/sparkline.js"></script>
-<!-- JQVMap -->
-<script src="{{url('')}}/plugins/jqvmap/jquery.vmap.min.js"></script>
-<script src="{{url('')}}/plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
 <!-- jQuery Knob Chart -->
 <script src="{{url('')}}/plugins/jquery-knob/jquery.knob.min.js"></script>
 <!-- daterangepicker -->
@@ -190,12 +198,15 @@
 <script src="{{url('')}}/plugins/summernote/summernote-bs4.min.js"></script>
 <!-- overlayScrollbars -->
 <script src="{{url('')}}/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+{{-- DATATABLE --}}
+<script src="{{url('')}}/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="{{url('')}}/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="{{url('')}}/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="{{url('')}}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{url('')}}/dist/js/adminlte.js"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{url('')}}/dist/js/pages/dashboard.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{{url('')}}/dist/js/demo.js"></script>
+<script type="text/javascript" src="{{url('')}}/dist/js/jquery.form.min.js">
+</script>
 @yield('js')
 </body>
 </html>
