@@ -50,6 +50,7 @@ class KaryawanController extends Controller
         ->where('status',$jenis)
         ->join('organisasi','organisasi.id','=','karyawan.organisasi_id')
         ;
+
         if($request->input('search.value')!=null){
             $data = $data->where(function($q)use($request){
                 $q->whereRaw('LOWER(karyawan.nik) like ? ',['%'.strtolower($request->input('search.value')).'%'])
@@ -62,6 +63,25 @@ class KaryawanController extends Controller
                 ;
             });
         }
+
+        if($request->input('organisasi')!=null){
+            $data = $data->where('organisasi_id',$request->organisasi);
+        }
+        if($request->input('bpjs_kesehatan')!=null){
+            if($request->input('bpjs_kesehatan')==1){
+                $data = $data->whereNotNull('nomor_bpjs_kesehatan');
+            }else if($request->input('bpjs_kesehatan')==0){
+                $data = $data->whereNull('nomor_bpjs_kesehatan');
+            }
+        }
+        if($request->input('bpjs_ketenagakerjaan')!=null){
+            if($request->input('bpjs_ketenagakerjaan')==1){
+                $data = $data->whereNotNull('nomor_bpjs_ketenagakerjaan');
+            }else if($request->input('bpjs_ketenagakerjaan')==0){
+                $data = $data->whereNull('nomor_bpjs_ketenagakerjaan');
+            }
+        }
+
         $recordsFiltered = $data->get()->count();
         if($request->input('length')!=-1) $data = $data->skip($request->input('start'))->take($request->input('length'));
         $data = $data->orderBy($orderBy,$request->input('order.0.dir'))->get();

@@ -21,7 +21,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="{{url('')}}/index2.html"><b>SDM</b>ANDA</a>
+    <a href="{{url('')}}/"><b>SDM</b>ANDA</a>
   </div>
   <!-- /.login-logo -->
   <div class="card">

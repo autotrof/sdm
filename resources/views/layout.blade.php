@@ -33,6 +33,14 @@
   <link rel="stylesheet" href="{{url('')}}/plugins/summernote/summernote-bs4.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <style type="text/css">
+    .divider{
+      width: 100%;
+      height: 1px;
+      background: #BBB;
+      margin: 1rem 0;
+    }
+  </style>
   @yield('css')
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">

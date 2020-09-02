@@ -1,7 +1,11 @@
 @extends('layout')
 
 @section('css')
-
+<style type="text/css">
+  #row-tampilan div label{
+    display: block;
+  }
+</style>
 @stop
 
 @section('content')
@@ -33,22 +37,103 @@
               <h3 class="card-title">Data Karyawan</h3>
             </div>
             <div class="card-body">
-              <table id="table" class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                  <th>
-                    <input type="checkbox" id="head-cb">
-                  </th>
-                  <th>NIK</th>
-                  <th>Nama</th>
-                  <th>KTP</th>
-                  <th>TELP</th>
-                  <th>ORG</th>
-                  <th>###</th>
-                </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+              <div class="row" id="row-tampilan">
+                <div class="col-md-12">
+                  <h4>Pilih Tampilan</h4>
+                </div>
+                <div class="col-md-3">
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="1" checked="true"> NIK
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="2" checked="true"> Nama
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="3" checked="true"> KTP
+                  </label>
+                </div>
+                <div class="col-md-3">
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="4" checked="true"> Telp
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="5" checked="true"> Org
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="6"> Email
+                  </label>
+                </div>
+                <div class="col-md-3">
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="7"> Detail Alamat
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="8"> Foto
+                  </label>
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="9"> BPJS Kesehatan
+                  </label>
+                </div>
+                <div class="col-md-3">
+                  <label>
+                    <input type="checkbox" class="tampilan" data-kolom="10"> BPJS Ketenagakerjaan
+                  </label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <h4>Filter Karyawan</h4>
+                </div>
+                <div class="col-md-4">
+                  <label>Organisasi</label>
+                  <select id="filter-organisasi" class="form-control filter">
+                    <option value="">Pilih Organisasi</option>
+                    @foreach($list_organisasi as $organisasi)
+                    <option value="{{$organisasi->id}}">{{$organisasi->nama}}</option>
+                    @endforeach
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label>BPJS Kesehatan</label>
+                  <select id="filter-bpjs-kesehatan" class="form-control filter">
+                    <option value="">Filter BPJS Kesehatan</option>
+                    <option value="1">BPJS Kesehatan Terdaftar</option>
+                    <option value="0">BPJS Kesehatan Belum Terdaftar</option>
+                  </select>
+                </div>
+                <div class="col-md-4">
+                  <label>BPJS Ketenagakerjaan</label>
+                  <select id="filter-bpjs-ketenagakerjaan" class="form-control filter">
+                    <option value="">Filter BPJS Ketenagakerjaan</option>
+                    <option value="1">BPJS Ketenagakerjaan Terdaftar</option>
+                    <option value="0">BPJS Ketenagakerjaan Belum Terdaftar</option>
+                  </select>
+                </div>
+              </div>
+              <div class="divider"></div>
+              <div class="table-responsive">
+                <table id="table" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>
+                      <input type="checkbox" id="head-cb">
+                    </th>
+                    <th>NIK</th>
+                    <th>Nama</th>
+                    <th>KTP</th>
+                    <th>TELP</th>
+                    <th>ORG</th>
+                    <th>Email</th>
+                    <th>Alamat</th>
+                    <th>Foto</th>
+                    <th>BPJS Kes</th>
+                    <th>BPJS Ket</th>
+                    <th>###</th>
+                  </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -239,8 +324,10 @@
 @section('js')
 <script type="text/javascript">
   let list_karyawan = [];
-  let yangDiCheck = 0;
-
+  let organisasi = $("#filter-organisasi").val()
+  ,bpjs_kesehatan = $("#filter-bpjs-kesehatan").val()
+  ,bpjs_ketenagakerjaan = $("#filter-bpjs-ketenagakerjaan").val()
+  
   const table = $('#table').DataTable({
     "pageLength": 100,
     "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, 'semua']],
@@ -250,12 +337,29 @@
     "processing":true,
     "bServerSide": true,
     "order": [[ 1, "desc" ]],
+    "autoWidth": false,
     "ajax":{
       url: "{{url('')}}/karyawan/data/{{$jenis}}",
-      type: "POST"
+      type: "POST",
+      data:function(d){
+        d.organisasi = organisasi;
+        d.bpjs_kesehatan = bpjs_kesehatan;
+        d.bpjs_ketenagakerjaan = bpjs_ketenagakerjaan;
+        return d
+      }
+    },
+    "initComplete": function(settings, json) {
+      const all_checkbox_view = $("#row-tampilan div input[type='checkbox']")
+      $.each(all_checkbox_view,function(key,checkbox){
+        let kolom = $(checkbox).data('kolom')
+        let is_checked = checkbox.checked
+        table.column(kolom).visible(is_checked)
+      })
+      setTimeout(function(){
+        table.columns.adjust().draw();
+      },3000)
     },
     columnDefs: [
-      { targets: '_all', visible: true },
       {
         "targets": 0,
         "class":"text-nowrap",
@@ -302,6 +406,41 @@
       },
       {
         "targets": 6,
+        "class":"text-nowrap",
+        "render": function(data, type, row, meta){
+          return row.email;
+        }
+      },
+      {
+        "targets": 7,
+        "class":"text-nowrap",
+        "render": function(data, type, row, meta){
+          return row.detail_alamat;
+        }
+      },
+      {
+        "targets": 8,
+        "class":"text-nowrap",
+        "render": function(data, type, row, meta){
+          return row.foto;
+        }
+      },
+      {
+        "targets": 9,
+        "class":"text-nowrap",
+        "render": function(data, type, row, meta){
+          return row.nomor_bpjs_kesehatan;
+        }
+      },
+      {
+        "targets": 10,
+        "class":"text-nowrap",
+        "render": function(data, type, row, meta){
+          return row.nomor_bpjs_ketenagakerjaan;
+        }
+      },
+      {
+        "targets": 11,
         "sortable":false,
         "render": function(data, type, row, meta){
           let tampilan = `<button onclick="showDetailKaryawan('${row.id}')" class="btn btn-sm btn-warning btn-block">Edit</button>`;
@@ -313,8 +452,21 @@
           return tampilan;
         }
       }
+      
     ]
   });
+
+  $("#row-tampilan input[type='checkbox']").on('change',function(){
+    let checkbox = $(this)
+    let kolom = $(this).data('kolom')
+    let is_checked = checkbox[0].checked
+    table.column(kolom).visible(is_checked)
+  })
+
+  function filterTampilan(){
+    let all_columns = $("#view-tampilan div label input")
+    
+  }
 
   $("#form-create").on('submit',function(e){
     e.preventDefault()
@@ -338,7 +490,7 @@
     const karyawan = list_karyawan[id]
     $("#modal-edit").modal('show')
     // SET SEMUA KE DEFAULT
-    $("#form-edit input:not([name='_token'])").val('')
+    $("#form-edit input:not([name='_token']):not([name='_method'])").val('')
     $("#form-edit textarea").val('')
     $("#form-edit select:not([name='status'])").val('')
 
@@ -427,5 +579,12 @@
     // console.log(semua_id)
     // console.log("YANG TERPILIH AKAN DINONAKTIFKAN")
   }
+
+  $(".filter").on('change',function(){
+    organisasi = $("#filter-organisasi").val()
+    bpjs_kesehatan = $("#filter-bpjs-kesehatan").val()
+    bpjs_ketenagakerjaan = $("#filter-bpjs-ketenagakerjaan").val()
+    table.ajax.reload(null,false)
+  })
 </script>
 @stop
