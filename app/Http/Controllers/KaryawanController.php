@@ -153,6 +153,12 @@ class KaryawanController extends Controller
         return Excel::download(new KaryawanExport, 'karyawan.xlsx');
     }
 
+    public function exportDataTerpilih(Request $request)
+    {
+        $ids = explode(',', $request->ids);
+        return Excel::download(new KaryawanExport($ids), 'karyawan.xlsx');
+    }
+
     public function tesExport(Request $request)
     {
         return Excel::download(new TesExport, 'tes.xlsx');
@@ -162,5 +168,18 @@ class KaryawanController extends Controller
     {
         Karyawan::whereIn('id',$request->ids)->update(['status'=>'non aktif']);
         return response()->json(true);
+    }
+
+    public function downloadPdf(Request $request,$id)
+    {
+        $data['karyawan'] = Karyawan::select([
+            'karyawan.*',
+            'organisasi.nama as nama_organisasi'
+        ])
+        ->join('organisasi','organisasi.id','=','karyawan.organisasi_id')
+        ->find($id)
+        ;
+        $pdf = \PDF::loadView('pdf.karyawan', $data);
+        return $pdf->stream('karyawan.pdf');
     }
 }

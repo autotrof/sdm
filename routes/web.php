@@ -25,12 +25,14 @@ Route::group(['middleware'=>'auth'],function(){
 	
 	Route::any('/karyawan/data/{jenis}','KaryawanController@data');
 	Route::get('/karyawan/export','KaryawanController@exportData');
+	Route::post('/karyawan/export_terpilih','KaryawanController@exportDataTerpilih');
 	Route::get('/karyawan/{jenis}','KaryawanController@index');
 	Route::post('/karyawan','KaryawanController@create');
 	Route::patch('/karyawan','KaryawanController@edit');
 	Route::post('/karyawan/update_status','KaryawanController@updateStatus');
 	Route::put('/karyawan','KaryawanController@importDataKaryawan');
 	Route::post('/karyawan/non-aktifkan','KaryawanController@nonAktifkanBanyak');
+	Route::get('/karyawan/download_pdf/{id}','KaryawanController@downloadPdf');
 
 	Route::get('/presensi','PresensiController@index');
 	

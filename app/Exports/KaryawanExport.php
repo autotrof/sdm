@@ -9,9 +9,16 @@ use App\Karyawan;
 
 class KaryawanExport implements FromQuery, WithHeadings, WithMapping
 {
+    protected $list_id = [];
+    function __construct($list_id=[]) {
+        $this->list_id = $list_id;
+    }
+
     public function query()
     {
-        return Karyawan::query();
+        $data = Karyawan::query();
+        if(count($this->list_id)>0) $data = $data->whereIn('id',$this->list_id);
+        return $data;
     }
 
 	public function headings(): array

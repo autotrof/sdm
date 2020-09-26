@@ -32,6 +32,7 @@
           <button class="btn btn-warning" style="margin-bottom: 1rem;" data-toggle="modal" data-target="#modal-import">Import Karyawan Excel</button>
           <a download class="btn btn-success" style="margin-bottom: 1rem;" href="{{url('')}}/karyawan/export">Export Karyawan Excel</a>
           <button type="button" id="button-nonaktif-all" disabled onclick="nonAktifkanTerpilih()" class="btn btn-danger" style="margin-bottom: 1rem;">Non Aktifkan</button>
+          <button disabled type="button" class="btn btn-success" style="margin-bottom: 1rem;" id="button-export-terpilih" onclick="exportKaryawanTerpilih()">Export Karyawan Terpilih</button>
           <div class="card">
             <div class="card-header">
               <h3 class="card-title">Data Karyawan</h3>
@@ -319,6 +320,10 @@
     </div>
   </div>
 
+  <form action="{{url('')}}/karyawan/export_terpilih" method="post" id="form-export-terpilih" class="hidden">
+    <input type="hidden" name="ids">
+    <button class="hidden" style="display: none;" type="submit">S</button>
+  </form>
 @stop
 
 @section('js')
@@ -443,7 +448,10 @@
         "targets": 11,
         "sortable":false,
         "render": function(data, type, row, meta){
-          let tampilan = `<button onclick="showDetailKaryawan('${row.id}')" class="btn btn-sm btn-warning btn-block">Edit</button>`;
+          let tampilan = `
+            <a target="_blank" href="{{url('')}}/karyawan/download_pdf/${row.id}" class="btn btn-sm btn-primary btn-block">Download Pdf</a>
+            <button onclick="showDetailKaryawan('${row.id}')" class="btn btn-sm btn-warning btn-block">Edit</button>
+          `;
           if(row.status=='aktif'){
             tampilan+=`<button onclick="toggleStatus('${row.id}')" class="btn btn-sm btn-danger btn-block">Nonaktifkan</button>`
           }else{
@@ -547,7 +555,7 @@
   $("#head-cb").on('click',function(){
     var isChecked = $("#head-cb").prop('checked')
     $(".cb-child").prop('checked',isChecked)
-    $("#button-nonaktif-all").prop('disabled',!isChecked)
+    $("#button-nonaktif-all,#button-export-terpilih").prop('disabled',!isChecked)
   })
 
   $("#table tbody").on('click','.cb-child',function(){
@@ -557,7 +565,8 @@
 
     let semua_checkbox = $("#table tbody .cb-child:checked")
     let button_non_aktif_status = (semua_checkbox.length>0)
-    $("#button-nonaktif-all").prop('disabled',!button_non_aktif_status)
+    let button_export_terpilih_status = button_non_aktif_status;
+    $("#button-nonaktif-all,#button-export-terpilih").prop('disabled',!button_non_aktif_status)
   })
 
   function nonAktifkanTerpilih () {
@@ -586,5 +595,26 @@
     bpjs_ketenagakerjaan = $("#filter-bpjs-ketenagakerjaan").val()
     table.ajax.reload(null,false)
   })
+
+  function exportKaryawanTerpilih() {
+    let checkbox_terpilih = $("#table tbody .cb-child:checked")
+    let semua_id = []
+    $.each(checkbox_terpilih,function(index,elm){
+      semua_id.push(elm.value)
+    })
+    let ids = semua_id.join(',')
+    $("#button-export-terpilih").prop('disabled',true)
+    $("#form-export-terpilih [name='ids']").val(ids)
+    $("#form-export-terpilih").submit()
+    // $.ajax({
+    //   url:"{{url('')}}/karyawan/export_terpilih",
+    //   method:'POST',
+    //   data:{ids:semua_id},
+    //   success:function(res){
+    //     console.log(res)
+    //     $("#button-export-terpilih").prop('disabled',false)
+    //   }
+    // })
+  }
 </script>
 @stop
