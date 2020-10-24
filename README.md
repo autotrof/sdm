@@ -21,7 +21,9 @@ Anda dilarang :
 - Menjual source code ini sekalipun telah anda edit atau modifikasi
 - Menggunakan source code ini untuk perusahaan anda atau perusahaan tempat anda bekerja. sekalipun telah anda edit atau modifikasi
 
-Jika anda tertarik untuk menjual/mendistribusikan source code ini atau mengimplementasikan di perusahaan anda atau perusahaan tempat anda bekerja, silahkan hubungi saya melalui Whatsapp 085812168079
+Jika anda tertarik untuk menjual/mendistribusikan source code ini atau mengimplementasikan di perusahaan anda atau perusahaan tempat anda bekerja, silahkan hubungi Whatsapp 085812168079
+
+Source code lengkap final silahkan hubungi WA : 085812168079
 
 Wassalamualaikum warahmatullahi wabarakatuh
 ##SALAM KODING
