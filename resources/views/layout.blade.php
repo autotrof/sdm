@@ -31,14 +31,21 @@
   <link rel="stylesheet" href="{{url('')}}/plugins/daterangepicker/daterangepicker.css">
   <!-- summernote -->
   <link rel="stylesheet" href="{{url('')}}/plugins/summernote/summernote-bs4.css">
+  <!-- select2 -->
+  <link rel="stylesheet" type="text/css" href="{{url('')}}/plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" type="text/css" href="{{url('')}}/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{url('')}}/plugins/orgchart/css/jquery.orgchart.min.css">
   <style type="text/css">
     .divider{
       width: 100%;
       height: 1px;
       background: #BBB;
       margin: 1rem 0;
+    }
+    .select2-selection.select2-selection--single{
+      height: 40px;
     }
   </style>
   @yield('css')
@@ -213,8 +220,11 @@
 <script src="{{url('')}}/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{url('')}}/dist/js/adminlte.js"></script>
+<script type="text/javascript" src="{{url('')}}/plugins/select2/js/select2.full.min.js"></script>
 <script type="text/javascript" src="{{url('')}}/dist/js/jquery.form.min.js">
 </script>
+<script type="text/javascript" src="{{url('')}}/plugins/orgchart/js/html2canvas.min.js"></script>
+<script type="text/javascript" src="{{url('')}}/plugins/orgchart/js/jquery.orgchart.min.js"></script>
 @yield('js')
 </body>
 </html>

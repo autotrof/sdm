@@ -21,6 +21,7 @@ class CreatePresensiTable extends Migration
             $table->timestamp('pulang')->nullable();
             $table->boolean('telat')->default(false);
             $table->enum('status',['masuk','belum masuk','pulang','alpha','telat'])->default('belum masuk');
+            $table->primary(['karyawan_id','tanggal']);
             $table->timestamps();
         });
     }

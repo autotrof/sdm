@@ -17,8 +17,13 @@ class CreateOrganisasiTable extends Migration
             $table->id();
             $table->string('nama');
             $table->unsignedBigInteger('parent_id')->nullable();
-            $table->foreign('parent_id')->references('id')->on('organisasi');
+            $table->foreign('parent_id')
+            ->references('id')
+            ->on('organisasi')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

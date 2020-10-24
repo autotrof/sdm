@@ -41,6 +41,21 @@ class KaryawanController extends Controller
             case "5":
                 $orderBy = 'organisasi.nama';
                 break;
+            case "6":
+                $orderBy = 'karyawan.email';
+                break;
+            case "7":
+                $orderBy = 'karyawan.detail_alamat';
+                break;
+            case "8":
+                $orderBy = 'karyawan.foto';
+                break;
+            case "9":
+                $orderBy = 'karyawan.nomor_bpjs_kesehatan';
+                break;
+            case "10":
+                $orderBy = 'karyawan.nomor_bpjs_ketenagakerjaan';
+                break;
         }
 
         $data = Karyawan::select([
@@ -170,6 +185,12 @@ class KaryawanController extends Controller
         return response()->json(true);
     }
 
+    public function aktifkanBanyak(Request $request)
+    {
+        Karyawan::whereIn('id',$request->ids)->update(['status'=>'aktif']);
+        return response()->json(true);
+    }    
+
     public function downloadPdf(Request $request,$id)
     {
         $data['karyawan'] = Karyawan::select([
@@ -181,5 +202,17 @@ class KaryawanController extends Controller
         ;
         $pdf = \PDF::loadView('pdf.karyawan', $data);
         return $pdf->stream('karyawan.pdf');
+    }
+
+    public function getFoto(Request $request,$id)
+    {
+        $karyawan = Karyawan::whereNotNull('foto')->find($id);
+        if($karyawan == null) abort(404);
+        $path = storage_path('app/'.$karyawan->foto);
+        // $file = \Storage::get($path);
+        // $type = \Storage::mimeType($path);
+        // $response = \Response::make($file, 200)->header("Content-Type", $type);
+        // return $response;
+        return response()->file($path);
     }
 }

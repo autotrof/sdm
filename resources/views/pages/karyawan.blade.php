@@ -31,7 +31,11 @@
           <button class="btn btn-primary" style="margin-bottom: 1rem;" data-toggle="modal" data-target="#modal-create">Tambah Karyawan</button>
           <button class="btn btn-warning" style="margin-bottom: 1rem;" data-toggle="modal" data-target="#modal-import">Import Karyawan Excel</button>
           <a download class="btn btn-success" style="margin-bottom: 1rem;" href="{{url('')}}/karyawan/export">Export Karyawan Excel</a>
+          @if($CHILDTAG=='aktif')
           <button type="button" id="button-nonaktif-all" disabled onclick="nonAktifkanTerpilih()" class="btn btn-danger" style="margin-bottom: 1rem;">Non Aktifkan</button>
+          @else
+          <button type="button" id="button-aktif-all" disabled onclick="aktifkanTerpilih()" class="btn btn-danger" style="margin-bottom: 1rem;">Aktifkan</button>
+          @endif
           <button disabled type="button" class="btn btn-success" style="margin-bottom: 1rem;" id="button-export-terpilih" onclick="exportKaryawanTerpilih()">Export Karyawan Terpilih</button>
           <div class="card">
             <div class="card-header">
@@ -426,8 +430,13 @@
       {
         "targets": 8,
         "class":"text-nowrap",
+        "sortable":false,
         "render": function(data, type, row, meta){
-          return row.foto;
+          if(row.foto==null){
+            return `<img style="max-width:85px;max-height:85px;" src="{{url('')}}/dist/img/default.png"/>`
+          }else{
+            return `<a href="{{url('')}}/karyawan/foto/${row.id}" target="_blank"><img style="max-width:85px;max-height:85px;" src="{{url('')}}/karyawan/foto/${row.id}"/></a>`
+          }
         }
       },
       {
@@ -556,6 +565,7 @@
     var isChecked = $("#head-cb").prop('checked')
     $(".cb-child").prop('checked',isChecked)
     $("#button-nonaktif-all,#button-export-terpilih").prop('disabled',!isChecked)
+    $("#button-aktif-all,#button-export-terpilih").prop('disabled',!isChecked)
   })
 
   $("#table tbody").on('click','.cb-child',function(){
@@ -567,6 +577,7 @@
     let button_non_aktif_status = (semua_checkbox.length>0)
     let button_export_terpilih_status = button_non_aktif_status;
     $("#button-nonaktif-all,#button-export-terpilih").prop('disabled',!button_non_aktif_status)
+    $("#button-aktif-all,#button-export-terpilih").prop('disabled',!button_non_aktif_status)
   })
 
   function nonAktifkanTerpilih () {
@@ -583,6 +594,26 @@
       success:function(res){
         table.ajax.reload(null,false)
         $("#button-nonaktif-all").prop('disabled',false)
+        $("#head-cb").prop('checked',false)
+      }
+    })
+  }
+
+  function aktifkanTerpilih () {
+    let checkbox_terpilih = $("#table tbody .cb-child:checked")
+    let semua_id = []
+    $.each(checkbox_terpilih,function(index,elm){
+      semua_id.push(elm.value)
+    })
+    $("#button-nonaktif-all").prop('disabled',true)
+    $.ajax({
+      url:"{{url('')}}/karyawan/aktifkan",
+      method:'post',
+      data:{ids:semua_id},
+      success:function(res){
+        table.ajax.reload(null,false)
+        $("#button-aktif-all").prop('disabled',false)
+        $("#head-cb").prop('checked',false)
       }
     })
     // console.log(semua_id)
