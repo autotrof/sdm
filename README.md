@@ -1,3 +1,6 @@
+# WE STAN WITH PALESTINE 🇵🇸
+# WE BOYCOT israhell product
+
 ## FREE SOURCE CODE UNTUK BELAJAR (BUKAN UNTUK DIJUAL)
 
 <p>Bismillah<br>
